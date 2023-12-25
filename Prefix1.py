@@ -51,12 +51,12 @@ if __name__ == '__main__':
                 endIndex.append(end - 1)
                 start = end  # Cập nhật start cho phần tiếp theo
             wait(futures)
-            print("End indexes: ", endIndex)
-            print("End indexes value: ", endIndexValue)
+            #print("End indexes: ", endIndex)
+            print("End indexes value: ", endIndexValue, "\n")
             endIndexValue = calculate_prefix_sum2(endIndexValue)
-            print("End indexes value sum: ", endIndexValue)
-            print("Normal Prefix Sum: ", calculate_prefix_sum2(arr))
-            print("Before Prefix Sum: ", result)
+            #print("End indexes value sum: ", endIndexValue, )
+            print("Normal Prefix Sum:    ", calculate_prefix_sum2(arr))
+            print("Not Added Prefix Sum: ", result, "\n")
 
             print("Value to Add: ", endIndexValue)
             endI = 0
@@ -69,7 +69,7 @@ if __name__ == '__main__':
                     endI += 1
 
             wait(futures)
-            print("After Prefix Sum: ", result)
+            print("Added Prefix Sum:  ", result)
 
 # Tóm tắt thuật toán: chia mảng lớn ra thành nhiều mảng nhỏ,
 # thực hiện tính prefix sum mỗi mảng nhỏ đó một cách song song,

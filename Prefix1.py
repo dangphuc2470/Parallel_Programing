@@ -23,16 +23,17 @@ def calculate_prefix_sum2(arr):
 def add(result, i, endIndexValue, endI):
     result[i] += endIndexValue[endI]
 
-
 if __name__ == '__main__':
 
     with multiprocessing.Manager() as manager:
-        arr = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110]
-        print("Input array: ", arr)
+        arr = [1] * 1000
         result = manager.list([-1] * len(arr))  # Giá trị ban đầu của các phần tử là -1, tương đương việc chươ tính
 
-        n = 4  # Số phần muốn chia mảng
+        n = 100  # Số phần muốn chia mảng
+        while len(arr) % n != 0:
+            arr.append(0)
 
+        print("Input array: ", arr)
         numPerChunk = len(arr) // n  # Kích thước của mỗi phần
         futures = []
         endIndex = []
@@ -70,3 +71,7 @@ if __name__ == '__main__':
             wait(futures)
             print("After Prefix Sum: ", result)
 
+# Tóm tắt thuật toán: chia mảng lớn ra thành nhiều mảng nhỏ,
+# thực hiện tính prefix sum mỗi mảng nhỏ đó một cách song song,
+# đưa kết quả vào mảng result, trong quá trình tính lưu lại phần tử cuối cùng của mảng,
+# tính prefix sum của mảng phần tử cuối này tuần tự, sau đó cộng các phần tử này vào mảng result một cách song song lần nữa sẽ được kết quả đúng

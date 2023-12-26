@@ -59,7 +59,7 @@ if __name__ == '__main__':
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             for i in range(len(position) - 1):
-                future = executor.submit(append, position[i], arr[i], result)  # Bỏ qua phần tử đầu
+                future = executor.submit(append, position[i], arr[i], result)
                 futures.append(future)
             concurrent.futures.wait(futures)
         print(result)

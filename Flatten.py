@@ -4,15 +4,6 @@ import time
 import random
 
 
-def calculate_prefix_sum(arr):
-    prefix_sum = 0
-    result_arr = [0] * len(arr)
-    for a in range(len(arr)):
-        prefix_sum += arr[a]
-        result_arr[a] = prefix_sum
-    return result_arr
-
-
 def append(position1, arr, result):
     pos = position1
     for j in range(len(arr)):
@@ -21,13 +12,13 @@ def append(position1, arr, result):
     return result
 
 
-def flatten_2d_array(array_2d):
-    flattened_array = []
-    for row in array_2d:
-        for element in row:
-            flattened_array.append(element)
-    return flattened_array
-
+# def flatten_2d_array(array_2d):
+#     flattened_array = []
+#     for row in array_2d:
+#         for element in row:
+#             flattened_array.append(element)
+#     return flattened_array
+#
 
 if __name__ == '__main__':
     with multiprocessing.Manager() as manager:
@@ -65,11 +56,6 @@ if __name__ == '__main__':
         result = manager.list([-1] * position[len(arr)])
         print(result)
         start = time.time()
-
-        # for i in range(len(position)-1):
-        #     append(position[i], arr[i], result)
-        # print(result)
-
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = []
             for i in range(len(position) - 1):
@@ -77,5 +63,24 @@ if __name__ == '__main__':
                 futures.append(future)
             concurrent.futures.wait(futures)
         print(result)
-
         print(time.time() - start)
+
+        # Tóm tắt thuật toán: Tìm độ dài của từng dòng trong mảng,
+        # thêm vào mảng position, mảng này chứa vị trí bắt đầu của từng dòng mới
+        # Tiến hành thêm các phần tử của mỗi dòng song song với nhau
+        # Phần dưới là dùng multiprocessing nhưng em thấy thời gian chạy nó lâu hơn dùng concurrent.futures
+
+        # result = multiprocessing.Array('i', [-1] * position[len(arr)])
+        #
+        # start = time.time()
+        # processes = []
+        # for i in range(len(position) - 1):
+        #     p = multiprocessing.Process(target=append, args=(position[i], arr[i], result))
+        #     processes.append(p)
+        #     p.start()
+        #
+        # for p in processes:
+        #     p.join()
+        #
+        # print(list(result))
+        # print(time.time() - start)

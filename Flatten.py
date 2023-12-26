@@ -1,4 +1,7 @@
 import multiprocessing
+import concurrent.futures
+import time
+import random
 
 
 def calculate_prefix_sum(arr):
@@ -18,6 +21,14 @@ def append(position1, arr, result):
     return result
 
 
+def flatten_2d_array(array_2d):
+    flattened_array = []
+    for row in array_2d:
+        for element in row:
+            flattened_array.append(element)
+    return flattened_array
+
+
 if __name__ == '__main__':
     with multiprocessing.Manager() as manager:
         # arr = [
@@ -27,27 +38,44 @@ if __name__ == '__main__':
         #     [2]
         # ]
 
-        arr = [
-            [1, 5, 9, 12, 22, 34, 19, 8],
-            [4, 6, 11, 23, 14, 18, 31, 21, 35],
-            [7, 10, 13, 20, 29, 32, 25, 30, 33, 36],
-            [2, 3, 15, 37, 38, 39, 40]
-        ]
+        # arr = [
+        #     [1, 5, 9, 12, 22, 34, 19, 8],
+        #     [4, 6, 11, 23, 14, 18, 31, 21, 35],
+        #     [7, 10, 13, 20, 29, 32, 25, 30, 33, 36],
+        #     [2, 3, 15, 37, 38, 39, 40]
+        # ]
+        arr = []
 
-        arrLen = [0]
+        counter = 1
+
+        for i in range(1000):
+            col_length = random.randint(1, 1000)
+            row = [counter + j for j in range(col_length)]
+            arr.append(row)
+            counter += col_length
+        print(arr)
+
+        prefixSum = 0
+        position = [0]
         for a in arr:
-            arrLen.append(len(a))
-        position = calculate_prefix_sum(arrLen)
+            prefixSum += len(a)
+            position.append(prefixSum)
         print(position)
 
         result = manager.list([-1] * position[len(arr)])
         print(result)
+        start = time.time()
 
-        for i in range(len(position)-1):
-            append(position[i], arr[i], result)
+        # for i in range(len(position)-1):
+        #     append(position[i], arr[i], result)
+        # print(result)
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+            for i in range(len(position) - 1):
+                future = executor.submit(append, position[i], arr[i], result)  # Bỏ qua phần tử đầu
+                futures.append(future)
+            concurrent.futures.wait(futures)
         print(result)
 
-        # for a in arr:
-        #     append(a, position[i], result)
-        #     i = i + 1
-
+        print(time.time() - start)
